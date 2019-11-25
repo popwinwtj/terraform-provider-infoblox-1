@@ -70,19 +70,7 @@ func resourceARecordCreate(d *schema.ResourceData, m interface{}) error {
 		}
 		return resourceARecordRead(d, m)
 	} else if r == 200 { // already exists, update local state and call update func
-		log.Printf("Record:a %s already exists", name)
-		log.Printf("Updating remote...")
-		r, err = infoblox.IbUpdateRecord(client, i.Ref, bodyUp)
-		if err != nil {
-			return err
-		}
-		log.Printf("Updating local state...")
-		d.Set("ipv4addr", i.Ipv4addr)
-		d.Set("name", i.Name)
-		d.Set("comment", i.Comment)
-		d.Set("view", i.View)
-		d.SetId(ipv4addr + name + comment + view)
-		return nil
+		return fmt.Errorf("The record is already existed in Infoblox.")
 	}
 	if err != nil {
 		return err
